@@ -3,22 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Website</title>
+<title>Login Page</title>
 <style>
 body {
     font-family: Arial, sans-serif;
+    background-color: #36393f;
     margin: 0;
     padding: 0;
-}
-
-.navbar {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .container {
-    margin: 20px;
+    background-color: #7289da;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"],
@@ -28,56 +30,63 @@ button {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 3px;
     box-sizing: border-box;
 }
 
+input[type="text"],
+input[type="password"] {
+    background-color: #f6f6f6;
+}
+
 button {
-    background-color: #007bff;
+    background-color: #4f545c;
     color: #fff;
-    border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #5f6670;
 }
 
 .error {
     color: red;
 }
 
-.hidden {
+.protected-content {
     display: none;
+    color: #fff;
+}
+
+.logged-in .protected-content {
+    display: block;
 }
 
 </style>
 </head>
 <body>
 
-<div class="navbar" id="navbar">
-    <div class="container">
-        <span id="welcomeMessage">Welcome, Guest!</span>
-        <button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
-    </div>
-</div>
-
-<div class="container" id="loginContainer">
-    <h2>Login</h2>
+<div class="container">
+    <h2 style="color: #fff;">Login</h2>
     <div id="error-message" class="error"></div>
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Login</button>
 </div>
 
-<div class="container hidden" id="protectedPage">
-    <h2>Protected Page</h2>
-    <p>This is a protected page that can only be viewed when logged in.</p>
+<div class="protected-content">
+    <h2>Welcome to the Protected Page</h2>
+    <p>This is the protected page that can only be viewed when logged in.</p>
+    <button onclick="logout()">Logout</button>
 </div>
 
 <script>
-let isLoggedIn = false;
+// Define allowed usernames and passwords
+const allowedUsers = [
+    { username: "solar", password: "%Ans2Wx" },
+    { username: "user", password: "123456" }
+];
 
 function login() {
     var username = document.getElementById("username").value;
@@ -89,41 +98,20 @@ function login() {
         return;
     }
 
-    // Simulate authentication (replace with actual authentication logic)
-    if (username === "admin" && password === "password") {
+    // Check if the entered username and password match any allowed user
+    const user = allowedUsers.find(u => u.username === username && u.password === password);
+    if (user) {
         alert("Login successful!");
-        isLoggedIn = true;
-        updateUI();
+        document.body.classList.add("logged-in");
     } else {
         document.getElementById("error-message").innerText = "Invalid username or password.";
     }
 }
 
 function logout() {
-    isLoggedIn = false;
-    updateUI();
+    document.body.classList.remove("logged-in");
 }
-
-function updateUI() {
-    if (isLoggedIn) {
-        document.getElementById("navbar").classList.remove("hidden");
-        document.getElementById("loginContainer").classList.add("hidden");
-        document.getElementById("protectedPage").classList.remove("hidden");
-        document.getElementById("logoutBtn").classList.remove("hidden");
-        document.getElementById("welcomeMessage").innerText = "Welcome, admin!";
-    } else {
-        document.getElementById("navbar").classList.add("hidden");
-        document.getElementById("loginContainer").classList.remove("hidden");
-        document.getElementById("protectedPage").classList.add("hidden");
-        document.getElementById("logoutBtn").classList.add("hidden");
-        document.getElementById("welcomeMessage").innerText = "Welcome, Guest!";
-    }
-}
-
-// Initial UI setup
-updateUI();
 </script>
 
 </body>
 </html>
-
