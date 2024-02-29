@@ -7,7 +7,8 @@
 <style>
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #121212;
+    color: #fff;
     margin: 0;
     padding: 0;
     display: flex;
@@ -17,7 +18,7 @@ body {
 }
 
 .container {
-    background-color: #fff;
+    background-color: #333;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -29,7 +30,6 @@ body {
 h2 {
     margin-top: 0;
     margin-bottom: 20px;
-    color: #333;
 }
 
 .error {
@@ -48,6 +48,8 @@ button {
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 16px;
+    background-color: #eee;
+    color: #333;
 }
 
 button {
@@ -62,7 +64,7 @@ button:hover {
 }
 
 #protected-content {
-    background-color: #fff;
+    background-color: #333;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -73,20 +75,32 @@ button:hover {
 }
 
 #protected-content h2 {
-    color: #333;
     margin-top: 0;
     margin-bottom: 20px;
 }
 
 #protected-content p {
-    color: #666;
     margin-bottom: 20px;
+}
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
 }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="login-form">
     <h2>Login</h2>
     <div id="error-message" class="error"></div>
     <input type="text" id="username" placeholder="Username">
@@ -94,7 +108,7 @@ button:hover {
     <button onclick="login()">Login</button>
 </div>
 
-<div id="protected-content" style="display: none;">
+<div id="protected-content">
     <h2>Welcome to the Protected Page</h2>
     <div id="user-profile">
         <img id="profile-pic" src="" alt="Profile Picture">
@@ -127,9 +141,13 @@ function login() {
     if (user) {
         alert("Login successful!");
         sessionStorage.setItem("loggedIn", "true");
-        document.getElementById("protected-content").style.display = "block";
-        document.getElementById("welcome-message").innerText = "Welcome, " + user.username + "!";
-        document.getElementById("profile-pic").src = user.profilePic;
+        document.getElementById("login-form").classList.add("fade-out");
+        setTimeout(() => {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("protected-content").style.display = "block";
+            document.getElementById("welcome-message").innerText = "Welcome, " + user.username + "!";
+            document.getElementById("profile-pic").src = user.profilePic;
+        }, 1000); // 1 second delay to allow fade out animation
     } else {
         document.getElementById("error-message").innerText = "Invalid username or password.";
     }
@@ -138,6 +156,8 @@ function login() {
 // Function to log out the user
 function logout() {
     sessionStorage.removeItem("loggedIn");
+    document.getElementById("login-form").style.display = "block";
+    document.getElementById("login-form").classList.remove("fade-out");
     document.getElementById("protected-content").style.display = "none";
 }
 </script>
