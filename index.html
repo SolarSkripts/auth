@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Page</title>
+<title>Multi-User Authentication System</title>
 <style>
 body {
     font-family: Arial, sans-serif;
-    background-color: #36393f;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
     display: flex;
@@ -17,121 +17,128 @@ body {
 }
 
 .container {
-    background-color: #7289da;
+    background-color: #fff;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: opacity 0.5s ease;
-    opacity: 1;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
 }
 
-.container.fade-out {
-    opacity: 0;
-    pointer-events: none; /* Disable pointer events to prevent interaction */
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
 }
 
 input[type="text"],
 input[type="password"],
 button {
     display: block;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 3px;
+    width: calc(100% - 22px);
+    padding: 12px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     box-sizing: border-box;
-}
-
-input[type="text"],
-input[type="password"] {
-    background-color: #f6f6f6;
+    font-size: 16px;
 }
 
 button {
-    background-color: #4f545c;
+    background-color: #007bff;
     color: #fff;
+    border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #5f6670;
+    background-color: #0056b3;
 }
 
-.error {
-    color: red;
-}
-
-.protected-content {
+#protected-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
     display: none;
-    color: #fff;
 }
 
-.logged-in .container {
-    display: none; /* Hide the login container when logged in */
+#protected-content h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
 }
 
-.logged-in .protected-content {
-    display: block;
+#protected-content p {
+    color: #666;
+    margin-bottom: 20px;
 }
-
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="color: #fff;">Login</h2>
+    <h2>Login</h2>
     <div id="error-message" class="error"></div>
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Login</button>
 </div>
 
-<div class="protected-content">
-    <h2>Projects </h2>
-    <p>Hi <span id="usernameDisplay">Guest</span> you have reached the project dashboard</p>
+<div id="protected-content" style="display: none;">
+    <h2>Welcome to the Protected Page</h2>
+    <div id="user-profile">
+        <img id="profile-pic" src="" alt="Profile Picture">
+        <p id="welcome-message"></p>
+    </div>
     <button onclick="logout()">Logout</button>
 </div>
 
-
-
-
-
-
-
 <script>
-// Define allowed usernames and passwords
-const allowedUsers = [
-    { username: "solar", password: "29%%" },
-    { username: "goat", password: "28%%" }
+// Define users with their credentials and profile picture URLs
+const users = [
+    { username: "user1", password: "password1", profilePic: "profile1.jpg" },
+    { username: "user2", password: "password2", profilePic: "profile2.jpg" },
+    { username: "user3", password: "password3", profilePic: "profile3.jpg" }
 ];
 
+// Function to handle user login
 function login() {
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 
-    // Simple validation
+    // Perform simple validation
     if (username === "" || password === "") {
         document.getElementById("error-message").innerText = "Please enter username and password.";
         return;
     }
 
-    // Check if the entered username and password match any allowed user
-    const user = allowedUsers.find(u => u.username === username && u.password === password);
+    // Check if the entered username and password match any user
+    const user = users.find(u => u.username === username && u.password === password);
     if (user) {
         alert("Login successful!");
-        document.body.classList.add("logged-in");
-
-        // Fade out the login container after a delay
-        setTimeout(() => {
-            document.querySelector('.container').classList.add('fade-out');
-        }, 1000);
+        sessionStorage.setItem("loggedIn", "true");
+        document.getElementById("protected-content").style.display = "block";
+        document.getElementById("welcome-message").innerText = "Welcome, " + user.username + "!";
+        document.getElementById("profile-pic").src = user.profilePic;
     } else {
         document.getElementById("error-message").innerText = "Invalid username or password.";
     }
 }
 
+// Function to log out the user
 function logout() {
-    document.body.classList.remove("logged-in");
+    sessionStorage.removeItem("loggedIn");
+    document.getElementById("protected-content").style.display = "none";
 }
 </script>
 
