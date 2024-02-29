@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Authentication System</title>
+<title>Project Website</title>
 <style>
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
@@ -48,17 +47,23 @@ button:hover {
 .error {
     color: red;
 }
+
+.hidden {
+    display: none;
+}
+
 </style>
 </head>
 <body>
 
 <div class="navbar" id="navbar">
     <div class="container">
-        <span>Welcome, <span id="usernameDisplay">Guest</span>!</span>
+        <span id="welcomeMessage">Welcome, Guest!</span>
+        <button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
     </div>
 </div>
 
-<div class="container">
+<div class="container" id="loginContainer">
     <h2>Login</h2>
     <div id="error-message" class="error"></div>
     <input type="text" id="username" placeholder="Username">
@@ -66,7 +71,14 @@ button:hover {
     <button onclick="login()">Login</button>
 </div>
 
+<div class="container hidden" id="protectedPage">
+    <h2>Protected Page</h2>
+    <p>This is a protected page that can only be viewed when logged in.</p>
+</div>
+
 <script>
+let isLoggedIn = false;
+
 function login() {
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
@@ -80,12 +92,38 @@ function login() {
     // Simulate authentication (replace with actual authentication logic)
     if (username === "admin" && password === "password") {
         alert("Login successful!");
-        document.getElementById("usernameDisplay").innerText = username; // Update navbar with username
+        isLoggedIn = true;
+        updateUI();
     } else {
         document.getElementById("error-message").innerText = "Invalid username or password.";
     }
 }
+
+function logout() {
+    isLoggedIn = false;
+    updateUI();
+}
+
+function updateUI() {
+    if (isLoggedIn) {
+        document.getElementById("navbar").classList.remove("hidden");
+        document.getElementById("loginContainer").classList.add("hidden");
+        document.getElementById("protectedPage").classList.remove("hidden");
+        document.getElementById("logoutBtn").classList.remove("hidden");
+        document.getElementById("welcomeMessage").innerText = "Welcome, admin!";
+    } else {
+        document.getElementById("navbar").classList.add("hidden");
+        document.getElementById("loginContainer").classList.remove("hidden");
+        document.getElementById("protectedPage").classList.add("hidden");
+        document.getElementById("logoutBtn").classList.add("hidden");
+        document.getElementById("welcomeMessage").innerText = "Welcome, Guest!";
+    }
+}
+
+// Initial UI setup
+updateUI();
 </script>
 
 </body>
 </html>
+
