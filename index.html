@@ -86,27 +86,16 @@ button:hover {
     <button onclick="login()">Login</button>
 </div>
 
-<div class="container hidden" id="protectedPage">
-    <h2>Project Dashboard</h2>
-    <span id="usernameDisplay"></span>You reached the project dashboard</span>
-    <div class="project-tasks">
-        <h3>Tasks</h3>
-        <ul>
-            <li>Work on Projects</li>
-            <li>Design UI for project dashboard</li>
-            <li>Implement more stuff</li>
-            <li>Test and deploy the projects</li>
-        </ul>
-    </div>
-    <div class="project-updates">
-        <h3>Updates</h3>
-        <ul>
-            <li>No updates!</li>
-            <li>No updates!</li>
-            <li>No updates!</li>
-        </ul>
-    </div>
+<div class="protected-content">
+    <h2>Welcome to the Protected Page</h2>
+    <p>This is the protected page that can only be viewed when logged in.</p>
+    <button onclick="logout()">Logout</button>
 </div>
+
+
+
+
+
 
 
 <script>
