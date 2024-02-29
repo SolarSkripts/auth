@@ -21,6 +21,13 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease;
+    opacity: 1;
+}
+
+.container.fade-out {
+    opacity: 0;
+    pointer-events: none; /* Disable pointer events to prevent interaction */
 }
 
 input[type="text"],
@@ -59,6 +66,10 @@ button:hover {
     color: #fff;
 }
 
+.logged-in .container {
+    display: none; /* Hide the login container when logged in */
+}
+
 .logged-in .protected-content {
     display: block;
 }
@@ -84,8 +95,8 @@ button:hover {
 <script>
 // Define allowed usernames and passwords
 const allowedUsers = [
-    { username: "solar", password: "%Ans2Wx" },
-    { username: "user", password: "123456" }
+    { username: "solar", password: "29%%" },
+    { username: "e", password: "a" }
 ];
 
 function login() {
@@ -103,6 +114,11 @@ function login() {
     if (user) {
         alert("Login successful!");
         document.body.classList.add("logged-in");
+
+        // Fade out the login container after a delay
+        setTimeout(() => {
+            document.querySelector('.container').classList.add('fade-out');
+        }, 1000);
     } else {
         document.getElementById("error-message").innerText = "Invalid username or password.";
     }
